@@ -1,0 +1,77 @@
+docx to pdf
+Certainly! Here's a simple and easy-to-use Python script that reads a text file, converts its content to a PDF using reportlab, and saves the PDF file in the same directory as the input file. This script does not use any external libraries or complex logic:
+
+Install reportlab if you haven't already:
+
+Copy code
+pip install reportlab
+Here's the simplified Python script:
+
+python
+Copy code
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import sys
+
+def convert_to_pdf(input_file):
+    # Read the content from the text file
+    with open(input_file, 'r') as file:
+        content = file.read()
+
+    # Create a PDF file using reportlab
+    pdf_filename = f'{input_file.split(".")[0]}.pdf'
+    c = canvas.Canvas(pdf_filename, pagesize=letter)
+    width, height = letter
+
+    # Define margins
+    left_margin = 72
+    top_margin = height - 72
+    c.setFont("Helvetica", 12)
+
+    # Split content into lines and write to PDF
+    lines = content.split('\n')
+    for line in lines:
+        c.drawString(left_margin, top_margin, line)
+        top_margin -= 15  # Adjust line spacing as needed
+        if top_margin <= 72:
+            c.showPage()
+            c.setFont("Helvetica", 12)
+            top_margin = height - 72
+
+    c.save()
+    return pdf_filename
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Please provide the input text file as an argument.")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    if not input_file.endswith('.txt'):
+        print("Unsupported file format. Please provide a .txt file.")
+        sys.exit(1)
+
+    try:
+        pdf_file = convert_to_pdf(input_file)
+        print(f"PDF file created: {pdf_file}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+Explanation:
+This script reads the content from the provided text file, creates a PDF using reportlab, and writes the content into the PDF.
+It takes the input file name as a command-line argument and checks if it's a .txt file before proceeding with the conversion.
+The PDF is saved with the same name as the input file, but with a .pdf extension.
+Usage:
+Save the script in the same directory as the text file you want to convert. Then, run the script from the command line, providing the text file as an argument:
+
+bash
+Copy code
+python script_name.py input_file.txt
+Replace script_name.py with the actual name of the script and input_file.txt with the name of your text file. After execution, it will create a PDF file in the same directory as the input file, containing the text content from the input file.
+
+If there are any issues, the script will print an error message indicating the problem.
+
+
+
+
+
+
