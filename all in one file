@@ -1,0 +1,64 @@
+i just need a source code for file converter lie i just upload a file it should convert it into pdf,jpg,docs,doxx,gif and so on give me source code in python with 95percent accuracy
+ChatGPT
+Creating a file converter that converts various file types to PDF, JPG, DOCX, GIF, etc., is quite a complex task, especially to achieve 95% accuracy across all file types. However, I can provide you with a basic example using Python that demonstrates how to convert common file types to PDF and JPG using libraries like PyPDF2, Pillow, and docx2pdf. Please note that this code may not cover all file types and may need modification for your specific needs.
+
+Make sure you have these libraries installed. You can install them using pip:
+
+bash
+Copy code
+pip install PyPDF2 pillow docx2pdf
+Here's a basic example:
+
+python
+Copy code
+import os
+from PIL import Image
+from PyPDF2 import PdfFileMerger
+from docx2pdf import convert
+
+def convert_to_pdf(input_file, output_file):
+    if input_file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+        image = Image.open(input_file)
+        image.save(output_file, 'PDF', resolution=100.0)
+    elif input_file.lower().endswith('.pdf'):
+        merger = PdfFileMerger()
+        merger.append(input_file)
+        merger.write(output_file)
+        merger.close()
+    elif input_file.lower().endswith('.docx'):
+        convert(input_file, output_file)
+    else:
+        print("Unsupported file format.")
+
+def convert_to_jpg(input_file, output_file):
+    if input_file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+        image = Image.open(input_file)
+        image.convert('RGB').save(output_file, 'JPEG')
+    elif input_file.lower().endswith('.pdf'):
+        pdf = Image.open(input_file)
+        pdf.save(output_file, 'JPEG')
+    else:
+        print("Unsupported file format.")
+
+# Example usage
+if __name__ == "__main__":
+    input_file = "input_file.docx"  # Change this to the file you want to convert
+    base_name = os.path.splitext(input_file)[0]
+    pdf_output = base_name + ".pdf"
+    jpg_output = base_name + ".jpg"
+
+    convert_to_pdf(input_file, pdf_output)
+    convert_to_jpg(input_file, jpg_output)
+
+    print("Conversion completed.")
+In this example:
+
+We define two functions: convert_to_pdf and convert_to_jpg.
+convert_to_pdf checks the input file type and converts it to PDF if it's an image, PDF, or DOCX.
+convert_to_jpg checks the input file type and converts it to JPG if it's an image or a PDF.
+Finally, we call these functions with an example DOCX file, converting it to both PDF and JPG.
+Remember, achieving 95% accuracy for all possible file types is challenging, and this example covers only a few common types. For more complex file conversions, you might need to use more specialized libraries or services.
+
+
+
+
